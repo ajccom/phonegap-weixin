@@ -66,7 +66,7 @@ you can send text, image, music, video, webpage with this api.
   window.plugins.weixin.send(args, Success, Fail);
 ```
 
-##### send arguments
+#####arguments detail
 
 ######send text
 
@@ -123,7 +123,7 @@ because of WeiXin API need a `thumbData`.
 
 ## Thank You Good People
 
-* @苏云静
+* @Bob Su
 
 ## License
 
