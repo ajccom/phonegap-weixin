@@ -121,7 +121,7 @@ you can send text, image, music, video, webpage with this api.
 and named `music.png`, `video.png`, `webpage.png`.
 because of WeiXin API need a `thumbData`.
 
-## Thank you Good People
+## Thank You Good People
 
 * @苏云静
 
