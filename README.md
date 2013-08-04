@@ -36,7 +36,9 @@ as `window.plugins.weixin`.
   
 if you want to use WeiXin API, first, you should register your app to WeiXin.
 
+```
   window.plugins.weixin.register(AppId, Success, Fail);
+```
 
 you should apply your app id [here](http://open.weixin.qq.com/app/list/?lang=zh_CN).
 
@@ -44,62 +46,77 @@ you should apply your app id [here](http://open.weixin.qq.com/app/list/?lang=zh_
 
 you can unregister your app from WeiXin.
 
+```
   window.plugins.weixin.unregister(Success, Fail);
-
+```
 
 ###openWeixin
 
 you can use it to open WeiXin app.
 
+```
   window.plugins.weixin.openWeixin(Success, Fail);
+```
   
 ###send
 
 you can send text, image, music, video, webpage with this api.
 
+```
   window.plugins.weixin.send(args, Success, Fail);
+```
 
 ##### send arguments
 
 ######send text
 
-  {type: 'text',
-  text: 'I want to send text',
+```
+	{type: 'text',
+	text: 'I want to send text',
 	isSendToTimeline: true} //if true, send to "朋友圈", else send to WeiXin friends.
+```
 
 ######send image
 
-  {type: 'image',
-  imageType: 'path',//you can also use 'url' to send image.
-  data: '/test.png',//SD card path or Url
-  isSendToTimeline: true}
+```
+	{type: 'image',
+	imageType: 'path',//you can also use 'url' to send image.
+	data: '/test.png',//SD card path or Url
+	isSendToTimeline: true}
+```
 
 ######send music
 
-  {type: 'music',
-  url: 'http://x.x.x/test.mp3',
-  title: 'title',
+```
+	{type: 'music',
+	url: 'http://x.x.x/test.mp3',
+	title: 'title',
 	desc: 'desc',
 	isLowBand: true,//WeiXin will use different API when mobile in low band environment.
 	isSendToTimeline: true}
+```
 
 ######send video
 
-  {type: 'video',
-  url: 'http://x.x.x.swf',
-  title: 'title',
-  desc: 'desc',
+```
+	{type: 'video',
+	url: 'http://x.x.x.swf',
+	title: 'title',
+	desc: 'desc',
 	isLowBand: true,
 	isSendToTimeline: true}
+```
 
 ######send webpage
 
-  {type: 'webpage',
-  url: 'http://www.baidu.com',
-  title: 'title',
-  desc: 'desc',
+```
+	{type: 'webpage',
+	url: 'http://www.baidu.com',
+	title: 'title',
+	desc: 'desc',
 	isSendToTimeline: true}
-  
+```
+
 * when send `music`, `video`, `webpage`, you should put series images to `res` folder,
 and named `music.png`, `video.png`, `webpage.png`.
 because of WeiXin API need a `thumbData`.
