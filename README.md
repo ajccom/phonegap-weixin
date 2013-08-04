@@ -8,7 +8,7 @@ is currently supported. Support for Ios is also planned.
 ###Android
 
 1.As with most Cordova/PhoneGap APIs, functionality is not available until the
-`deviceready` event has fired on the document. The `childbrowser.js` file
+`deviceready` event has fired on the document. The `weixin.js` file
 should be included _after_ the `cordova-x.x.x.js` file.
 
   <script src="js/cordova-2.3.0.js"></script>
