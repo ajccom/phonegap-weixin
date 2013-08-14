@@ -14,8 +14,10 @@ should be included _after_ the `cordova-x.x.x.js` file.
   <script src="js/cordova-2.3.0.js"></script>
   <script src="js/weixin.js"></script>
 
-2.Put java file in `src` folder to your project.
-And edit your package path at `import [yourPackage].R`.
+2.Put `WeiXin.java` to your plugin path, default is `com.phonegap.plugins.weixin.WeiXin`.
+And edit your package path at line `import [yourPackageName].R` and `import [yourPackageName].Util`.
+
+Put `Util.java` to your main package, it will be imported in `WeiXin.java`.
 
 3.Put jar file in `libs` to your project and don't forget to `Add to build path`.
 

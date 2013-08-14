@@ -21,9 +21,9 @@ import com.tencent.mm.sdk.openapi.WXTextObject;
 import com.tencent.mm.sdk.openapi.WXVideoObject;
 import com.tencent.mm.sdk.openapi.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.SendAuth;
-import com.example.easynotepad.Util;
+import [yourPackageName].Util;
 
-import [yourPackage].R;
+import [yourPackageName].R;
 
 import org.apache.cordova.api.CallbackContext;
 import org.apache.cordova.api.CordovaPlugin;
