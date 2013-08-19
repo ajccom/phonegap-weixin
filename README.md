@@ -23,7 +23,7 @@ Put `Util.java` to your main package, it will be imported in `WeiXin.java`.
 
 4.Open your `config.xml` file and add:
 
-  <plugin name="WeiXin" value="com.phonegap.plugins.weixin.WeiXin"/>
+  `<plugin name="WeiXin" value="com.phonegap.plugins.weixin.WeiXin"/>`
 
 ###IOS
 
