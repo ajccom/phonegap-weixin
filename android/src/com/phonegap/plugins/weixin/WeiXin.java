@@ -2,6 +2,7 @@ package com.phonegap.plugins.weixin;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 import com.tencent.mm.sdk.openapi.BaseReq;
@@ -21,9 +22,10 @@ import com.tencent.mm.sdk.openapi.WXTextObject;
 import com.tencent.mm.sdk.openapi.WXVideoObject;
 import com.tencent.mm.sdk.openapi.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.SendAuth;
-import [yourPackageName].Util;
+import com.tencent.mm.sdk.openapi.WXFileObject;
+import com.example.easynotepad.Util;
 
-import [yourPackageName].R;
+import com.example.easynotepad.R;
 
 import org.apache.cordova.api.CallbackContext;
 import org.apache.cordova.api.CordovaPlugin;
@@ -80,11 +82,13 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 				} else if (cfg.getString("type").equals("image")) {
 					this.sendImage(cfg.getString("data"), cfg.getString("imageType"), cfg.getBoolean("isSendToTimeline"));
 				} else if (cfg.getString("type").equals("music")) {
-					this.sendMusic(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getBoolean("isSendToTimeline"));
+					this.sendMusic(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
 				} else if (cfg.getString("type").equals("video")) {
-					this.sendVideo(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getBoolean("isSendToTimeline"));
+					this.sendVideo(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
 				} else if (cfg.getString("type").equals("webpage")) {
-					this.sendWebPage(cfg.getString("url"), cfg.getString("title"), cfg.getString("desc"), cfg.getBoolean("isSendToTimeline"));
+					this.sendWebPage(cfg.getString("url"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
+				} else if (cfg.getString("type").equals("file")) {
+					this.sendFile(cfg.getString("path"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
 				}
 				
 				callbackContext.success();
@@ -162,7 +166,7 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 				} else {
 					LOG.d("WeChat Plugin", "get file @" + path);
 				}
-				imgObj.setImagePath(path); 
+				imgObj.setImagePath(path);
 				
 				FileInputStream fis = new FileInputStream(path);
 				bmp = BitmapFactory.decodeStream(fis);
@@ -192,7 +196,7 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 	}
 	
 	//send music
-	public void sendMusic(String url, boolean isLowBand, String title, String desc, boolean isSendToTimeline) {
+	public void sendMusic(String url, boolean isLowBand, String title, String desc, String imgUrl, boolean isSendToTimeline) {
 		WXMusicObject music = new WXMusicObject();
 		if (isLowBand == false) {
 			music.musicUrl = url;
@@ -206,26 +210,37 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 		msg.mediaObject = music;
 		msg.title = title;
 		msg.description = desc;
-
-		Context Activity = this.cordova.getActivity().getApplicationContext();
-		Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.music);
-		msg.thumbData = Util.bmpToByteArray(thumb, true);
-
-		SendMessageToWX.Req req = new SendMessageToWX.Req();
-		req.transaction = buildTransaction("music");
-		req.message = msg;
-		int wxSdkVersion = api.getWXAppSupportAPI();
-		if (wxSdkVersion >= 0x21020001) {
-			req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
-		} else {
-			req.scene = SendMessageToWX.Req.WXSceneSession;
-		}
-		api.sendReq(req);
 		
+		Bitmap bmp = null;
+		try{
+			if (imgUrl.equals("")) {
+				Context Activity = this.cordova.getActivity().getApplicationContext();
+				Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.music);
+				msg.thumbData = Util.bmpToByteArray(thumb, true);
+			} else {
+				bmp = BitmapFactory.decodeStream(new URL(imgUrl).openStream());
+				Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+				bmp.recycle();
+				msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+			}
+
+			SendMessageToWX.Req req = new SendMessageToWX.Req();
+			req.transaction = buildTransaction("music");
+			req.message = msg;
+			int wxSdkVersion = api.getWXAppSupportAPI();
+			if (wxSdkVersion >= 0x21020001) {
+				req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+			} else {
+				req.scene = SendMessageToWX.Req.WXSceneSession;
+			}
+			api.sendReq(req);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 		
 	//send video
-	public void sendVideo(String url, boolean isLowBand, String title, String desc, boolean isSendToTimeline) {
+	public void sendVideo(String url, boolean isLowBand, String title, String desc, String imgUrl, boolean isSendToTimeline) {
  		WXVideoObject video = new WXVideoObject();
 		if (isLowBand == false) {
 			video.videoUrl = url;
@@ -236,49 +251,115 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 		WXMediaMessage msg = new WXMediaMessage(video);
 		msg.title = title;
 		msg.description = desc;
+		Bitmap bmp = null;
+		try{
+			if (imgUrl.equals("")) {
+				Context Activity = this.cordova.getActivity().getApplicationContext();
+				Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.video);
+				msg.thumbData = Util.bmpToByteArray(thumb, true);
+			} else {
+				bmp = BitmapFactory.decodeStream(new URL(imgUrl).openStream());
+				Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+				bmp.recycle();
+				msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+			}
 
-		Context Activity = this.cordova.getActivity().getApplicationContext();
-		Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.video);
-		msg.thumbData = Util.bmpToByteArray(thumb, true);
-
-		SendMessageToWX.Req req = new SendMessageToWX.Req();
-		req.transaction = buildTransaction("video");
-		req.message = msg;
-		int wxSdkVersion = api.getWXAppSupportAPI();
-		if (wxSdkVersion >= 0x21020001) {
-			req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
-		} else {
-			req.scene = SendMessageToWX.Req.WXSceneSession;
+			SendMessageToWX.Req req = new SendMessageToWX.Req();
+			req.transaction = buildTransaction("video");
+			req.message = msg;
+			int wxSdkVersion = api.getWXAppSupportAPI();
+			if (wxSdkVersion >= 0x21020001) {
+				req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+			} else {
+				req.scene = SendMessageToWX.Req.WXSceneSession;
+			}
+			api.sendReq(req);
+			//LOG.d("!!!!!!!!!!!!!!!!!!!!", video.videoUrl);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		api.sendReq(req);
-		//LOG.d("!!!!!!!!!!!!!!!!!!!!", video.videoUrl);
-		
 	}
 	
 	//send webpage
-	public void sendWebPage(String url, String title, String desc, boolean isSendToTimeline) {
+	public void sendWebPage(String url, String title, String desc, String imgUrl, boolean isSendToTimeline) {
 		WXWebpageObject webpage = new WXWebpageObject();
 		webpage.webpageUrl = url;
 		WXMediaMessage msg = new WXMediaMessage(webpage);
 		msg.title = title;
 		msg.description = desc;
-		Context Activity = this.cordova.getActivity().getApplicationContext();
-		Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.webpage);
-		msg.thumbData = Util.bmpToByteArray(thumb, true);
-		
-		SendMessageToWX.Req req = new SendMessageToWX.Req();
-		req.transaction = buildTransaction("webpage");
-		req.message = msg;
-		int wxSdkVersion = api.getWXAppSupportAPI();
-		if (wxSdkVersion >= 0x21020001) {
-			req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
-		} else {
-			req.scene = SendMessageToWX.Req.WXSceneSession;
+		Bitmap bmp = null;
+		try{
+			if (imgUrl.equals("")) {
+				Context Activity = this.cordova.getActivity().getApplicationContext();
+				Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.webpage);
+				msg.thumbData = Util.bmpToByteArray(thumb, true);
+			} else {
+				bmp = BitmapFactory.decodeStream(new URL(imgUrl).openStream());
+				Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+				bmp.recycle();
+				msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+			}
+			
+			SendMessageToWX.Req req = new SendMessageToWX.Req();
+			req.transaction = buildTransaction("webpage");
+			req.message = msg;
+			int wxSdkVersion = api.getWXAppSupportAPI();
+			if (wxSdkVersion >= 0x21020001) {
+				req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+			} else {
+				req.scene = SendMessageToWX.Req.WXSceneSession;
+			}
+			api.sendReq(req);
+			LOG.d("!!!!!!!!!!!!!!!!!!!!", webpage.webpageUrl);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		api.sendReq(req);
-		LOG.d("!!!!!!!!!!!!!!!!!!!!", webpage.webpageUrl);
 	}
 	
+	//send webpage
+	public void sendFile(String path, String title, String desc, String imgUrl, boolean isSendToTimeline) {
+		WXFileObject appdata = new WXFileObject();
+		//String pathStr = SDCARD_ROOT + path;
+		
+		//LOG.d("!!!!!!!!!!!!!!!!!!!!", pathStr);
+		
+		appdata.filePath = SDCARD_ROOT + path;
+		//appdata.fileData = Util.readFromFile(pathStr, 0, -1);
+		WXMediaMessage msg = new WXMediaMessage(appdata);
+		
+		Bitmap bmp = null;
+		try{
+			if (imgUrl.equals("")) {
+				Context Activity = this.cordova.getActivity().getApplicationContext();
+				Bitmap thumb = BitmapFactory.decodeResource(Activity.getResources(), R.drawable.file);
+				msg.thumbData = Util.bmpToByteArray(thumb, true);
+			} else {
+				bmp = BitmapFactory.decodeStream(new URL(imgUrl).openStream());
+				Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+				bmp.recycle();
+				msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+			}
+			
+			msg.title = title;
+			msg.description = desc;
+			msg.mediaObject = appdata;
+			
+			SendMessageToWX.Req req = new SendMessageToWX.Req();
+			req.transaction = buildTransaction("appdata");
+			req.message = msg;
+			int wxSdkVersion = api.getWXAppSupportAPI();
+			if (wxSdkVersion >= 0x21020001) {
+				req.scene = isSendToTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+			} else {
+				req.scene = SendMessageToWX.Req.WXSceneSession;
+			}
+			api.sendReq(req);
+			LOG.d("!!!!!!!!!!!!!!!!!!!!", appdata.filePath);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
 	//unregister
 	public void unregister() {
 		api.unregisterApp();

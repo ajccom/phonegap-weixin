@@ -94,7 +94,8 @@ you can send text, image, music, video, webpage with this api.
 	url: 'http://x.x.x/test.mp3',
 	title: 'title',
 	desc: 'desc',
-	isLowBand: true,//WeiXin will use different API when mobile in low band environment.
+	isLowBand: true,//WeiXin will use different API when mobile in low band environment. default false
+	imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/music.png'
 	isSendToTimeline: true}
 ```
 
@@ -106,6 +107,7 @@ you can send text, image, music, video, webpage with this api.
 	title: 'title',
 	desc: 'desc',
 	isLowBand: true,
+	imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/video.png'
 	isSendToTimeline: true}
 ```
 
@@ -116,10 +118,22 @@ you can send text, image, music, video, webpage with this api.
 	url: 'http://www.baidu.com',
 	title: 'title',
 	desc: 'desc',
+	imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/webpage.png'
 	isSendToTimeline: true}
 ```
 
-* when send `music`, `video`, `webpage`, you should put series images to `res` folder,
+######send file
+
+```
+	{type: 'file',
+	path: 'file:///test.mp3',//file's fullPath
+	desc: '我在发本地文件',
+	title: '文件',
+	imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/file.png'
+	isSendToTimeline: true}
+```
+
+* when send `music`, `video`, `webpage` and `file`, you should put series images to `res` folder,
 and named `music.png`, `video.png`, `webpage.png`.
 because of WeiXin API need a `thumbData`.
 

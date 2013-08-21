@@ -26,6 +26,7 @@
 		if (arg.type === 'music' || arg.type === 'video' || arg.type === 'webpage') {
 			if (typeof arg.title === 'undefined') {arg.title = ''}
 			if (typeof arg.desc === 'undefined') {arg.desc = ''}
+			if (typeof arg.imgUrl === 'undefined') {arg.imgUrl = ''}
 			if (typeof arg.isLowBand === 'undefined') {arg.isLowBand = false}
 		}
 		cordova.exec(success, error, "WeiXin", "send", [arg]);
