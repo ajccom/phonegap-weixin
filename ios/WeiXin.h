@@ -9,7 +9,7 @@
 #import "WXApi.h"
 #import "WXApiObject.h"
 
-@interface WeiXin : CDVPlugin <sendMsgToWeChatViewDelegate, WXApiDelegate, RespForWeChatViewDelegate>
+@interface WeiXin : CDVPlugin <WXApiDelegate>
 {
     enum WXScene _scene;
 }
