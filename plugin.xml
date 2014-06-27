@@ -40,8 +40,8 @@
             </feature>
         </config-file>
 
-        <source-file src="android/src/com/phonegap/plugins/weixin/WeiXin.java" target-dir="src/com.phonegap.plugins.weixin" />
-        <source-file src="android/src/com/phonegap/plugins/weixin/Util.java" target-dir="src/com.phonegap.plugins.weixin" />
+        <source-file src="android/src/com/phonegap/plugins/weixin/WeiXin.java" target-dir="src/com/phonegap/plugins/weixin" />
+        <source-file src="android/src/com/phonegap/plugins/weixin/Util.java" target-dir="src/com/phonegap/plugins/weixin" />
 
         <source-file src="android/libs/libammsdk.jar" target-dir="libs" />
     </platform>
