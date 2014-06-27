@@ -7,39 +7,33 @@ is currently supported. Support for Ios is also planned.
 
 ###Android
 
-1.As with most Cordova/PhoneGap APIs, functionality is not available until the
-`deviceready` event has fired on the document. The `weixin.js` file
-should be included _after_ the `cordova-x.x.x.js` file.
+1. Edit your package path at line `import [yourPackageName].R`
 
-  <script src="js/cordova-2.3.0.js"></script>
-  <script src="js/weixin.js"></script>
-
-2.Put `WeiXin.java` to your plugin path, default is `com.phonegap.plugins.weixin.WeiXin`.
-And edit your package path at line `import [yourPackageName].R` and `import [yourPackageName].Util`.
-
-Put `Util.java` to your main package, it will be imported in `WeiXin.java`.
-
-3.Put jar file in `libs` to your project and don't forget to `Add to build path`.
-
-4.Open your `config.xml` file and add:
-
-  `<plugin name="WeiXin" value="com.phonegap.plugins.weixin.WeiXin"/>`
+2. Put `libammsdk.jar` file in `libs` to your `build path`.
 
 ###IOS
 
-wait... 
+1. Add `wx[appID]` to your `Info.plist`
+![](ios_plist.jpg?raw=true)
+2. Add `AppDelegate.m` `openURL` method
+```
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [WXApi hadleOpenURL:url delegate:self];
+}
+```
 
 ##API
 
 All functions are called on the singleton ChildBrowser instance - accessible
-as `window.plugins.weixin`.
+as `navigator.weixin`.
 
 ###register
   
 if you want to use WeiXin API, first, you should register your app to WeiXin.
 
 ```
-  window.plugins.weixin.register(AppId, Success, Fail);
+  navigator.weixin.register(AppId, Success, Fail);
 ```
 
 you should apply your app id [here](http://open.weixin.qq.com/app/list/?lang=zh_CN).
@@ -49,7 +43,7 @@ you should apply your app id [here](http://open.weixin.qq.com/app/list/?lang=zh_
 you can unregister your app from WeiXin.
 
 ```
-  window.plugins.weixin.unregister(Success, Fail);
+  navigator.weixin.unregister(Success, Fail);
 ```
 
 ###openWeixin
@@ -57,7 +51,7 @@ you can unregister your app from WeiXin.
 you can use it to open WeiXin app.
 
 ```
-  window.plugins.weixin.openWeixin(Success, Fail);
+  navigator.weixin.openWeixin(Success, Fail);
 ```
   
 ###send
@@ -65,7 +59,7 @@ you can use it to open WeiXin app.
 you can send text, image, music, video, webpage with this api.
 
 ```
-  window.plugins.weixin.send(args, Success, Fail);
+  navigator.weixin.send(args, Success, Fail);
 ```
 
 #####arguments detail
