@@ -1,4 +1,4 @@
-package com.wxopener;
+package com.phonegap.plugins.weixin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -109,7 +109,7 @@ public class Util {
 		byte[] b = null;
 		try {
 			RandomAccessFile in = new RandomAccessFile(fileName, "r");
-			b = new byte[len]; // 创建合适文件大小的数组
+			b = new byte[len];
 			in.seek(offset);
 			in.readFully(b);
 			in.close();
@@ -201,3 +201,4 @@ public class Util {
 		return null;
 	}
 }
+

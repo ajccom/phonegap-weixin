@@ -23,14 +23,17 @@ import com.tencent.mm.sdk.openapi.WXVideoObject;
 import com.tencent.mm.sdk.openapi.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.SendAuth;
 import com.tencent.mm.sdk.openapi.WXFileObject;
-import com.example.easynotepad.Util;
+import com.phonegap.plugins.weixin.Util;
 
 import com.example.easynotepad.R;
 
-import org.apache.cordova.api.CallbackContext;
-import org.apache.cordova.api.CordovaPlugin;
-import org.apache.cordova.api.LOG;
-import org.apache.cordova.api.PluginResult;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.LOG;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -365,7 +368,6 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 		api.unregisterApp();
 	}
 	
-	// 微信发送请求到第三方应用时，会回调到该方法
 		@Override
 		public void onReq(BaseReq req) {
 			LOG.d("req", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -383,7 +385,6 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 			}
 		}
 
-		// 第三方应用发送到微信的请求处理后的响应结果，会回调到该方法
 		@Override
 		public void onResp(BaseResp resp) {
 			LOG.d("resp", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
