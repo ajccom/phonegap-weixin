@@ -15,7 +15,7 @@ is currently supported. Support for Ios is also planned.
 
 1. Add `wx[appID]` to your `Info.plist`
 ![](ios_plist.jpg?raw=true)
-2. Add `AppDelegate.m` `openURL` method
+2. Add following code to  `openURL` method in `AppDelegate.m` file
 ```
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
