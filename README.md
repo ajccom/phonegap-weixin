@@ -7,7 +7,7 @@ is currently supported. Support for Ios is also planned.
 
 ###Android
 
-1. Edit your package path at line `import [yourPackageName].R`
+1. Edit your package path at line `import [yourPackageName].R` in `WeiXin.java` file
 
 2. Put `libammsdk.jar` file in `libs` to your `build path`.
 
