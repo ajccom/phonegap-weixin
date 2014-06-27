@@ -25,7 +25,7 @@ import com.tencent.mm.sdk.openapi.SendAuth;
 import com.tencent.mm.sdk.openapi.WXFileObject;
 import com.phonegap.plugins.weixin.Util;
 
-import org.qingyue.babycare.R;
+import com.example.easynotepad.R;
 
 
 import org.apache.cordova.CallbackContext;
