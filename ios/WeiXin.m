@@ -106,19 +106,21 @@
     [message setThumbImage:[UIImage imageNamed:@"res5thumb.png"]];
 
     WXImageObject *ext = [WXImageObject object];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"res5thumb" ofType:@"png"];
-    NSLog(@"filepath :%@",filePath);
-    ext.imageData = [NSData dataWithContentsOfFile:filePath];
-
-    //UIImage* image = [UIImage imageWithContentsOfFile:filePath];
-    UIImage* image = [UIImage imageWithData:ext.imageData];
+    
+    NSString *imageType = [self parseStringFromJS:self.pendingCommand.arguments keyFromJS:@"imageType"];
+    NSString *filePath = [self parseStringFromJS:self.pendingCommand.arguments keyFromJS:@"data"];
+    NSString *title = [self parseStringFromJS:self.pendingCommand.arguments keyFromJS:@"title"];
+    UIImage *image;
+    if([imageType isEqual:@"url"]){
+        image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString:filePath]]];
+    }else if([imageType isEqual:@"path"]){
+        image = [UIImage imageWithData: [NSData dataWithContentsOfFile: filePath]];
+    }
     ext.imageData = UIImagePNGRepresentation(image);
 
-    //    UIImage* image = [UIImage imageNamed:@"res5thumb.png"];
-    //    ext.imageData = UIImagePNGRepresentation(image);
-
     message.mediaObject = ext;
-
+    message.title = title;
+    
     SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
