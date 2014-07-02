@@ -36,7 +36,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="WeiXin">
-                <param name="android-package" value="com.phonegap.plugins.weixin"/>
+                <param name="android-package" value="com.phonegap.plugins.weixin.WeiXin"/>
             </feature>
         </config-file>
 
