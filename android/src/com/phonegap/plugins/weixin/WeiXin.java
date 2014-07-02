@@ -161,7 +161,11 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 				
 			} else if (imageType.equals("path")) {
 				LOG.d("WeChat Plugin", "file path: " + SDCARD_ROOT + data);
-				path = (SDCARD_ROOT + data).replaceAll(" ", "%20");
+				if(data.startsWith(SDCARD_ROOT)){
+					path = data;
+				}else{
+					path = (SDCARD_ROOT + data).replaceAll(" ", "%20");		
+				}
 				file = new File(path);
 				if (!file.exists()) {
 					LOG.d("WeChat Plugin", "file not exists");
@@ -325,8 +329,11 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 		//String pathStr = SDCARD_ROOT + path;
 		
 		//LOG.d("!!!!!!!!!!!!!!!!!!!!", pathStr);
-		
-		appdata.filePath = SDCARD_ROOT + path;
+		if(path.startsWith(SDCARD_ROOT)){
+			appdata.filePath = path;
+		}else{
+			appdata.filePath = SDCARD_ROOT + path;
+		}	
 		//appdata.fileData = Util.readFromFile(pathStr, 0, -1);
 		WXMediaMessage msg = new WXMediaMessage(appdata);
 		
