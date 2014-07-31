@@ -1,0 +1,3 @@
+# view AndroidManifest.xml #generated:35
+-keep class com.example.weixin.WeiXin { <init>(...); }
+

@@ -1,0 +1,221 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>食物营养手册</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="css/Jingle.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="aside_container">
+</div>
+
+<div id="section_container">
+    <section id="index_section" class="active">
+        <header>
+            <!--<nav class="left">
+                <a id="btn_scan_barcode" data-icon="qrcode" href=""></a>
+            </nav>-->
+            <h1 class="title">掌上营养师</h1>
+        </header>
+		<footer>
+			<a href="#a-index" data-icon="home" data-target="article" class="active">首页</a>
+			<a href="#a-category" data-icon="list"  data-target="article">食物分类</a>
+			<a href="#a-yangsheng" data-icon="info"  data-target="article">养生观念</a>
+			<a href="#a-about" data-icon="user"  data-target="article">关于</a>
+		</footer>
+        <article class="active" id="a-index" data-scroll="true" style="padding: 10px">
+			<div class="scrollWrapper">
+			<!--  
+			<a href="#" id="openDB" class="button">打开数据库</a>
+			<a href="#" id="openFile" class="button">打开文件</a>-->
+			<div>
+			<a href="#" id="weixin" class="button">分享到微信好友</a>
+			</div>
+			
+			<br/>
+			
+			<div>
+			<a href="#" id="timeline" class="button">分享到微信朋友圈</a>
+			</div>
+			
+			<br/>
+			
+			<div>
+			<a href="#" id="showToast" class="button" >提示信息</a>
+			</div>
+			
+			
+
+			<h2 class="center">需要了解的原则</h2>
+			<div class="index-row">
+			<p><span class="label">1</span>	食物分寒、凉、平、温、热五性，人是喜温动物，应该少食寒凉食物，多食性平和性温食物，对于性热食物，容易导致上火，所以也应少食。</p>
+			<div class="clear"></div>
+			</div>
+			
+			<div class="index-row">
+			<p><span class="label">2</span>	油腻和辛辣食物对任何体质的人都是不适宜的，应该少食。</p>
+			<div class="clear"></div>
+			</div>
+			
+			<div class="index-row">
+			<p><span class="label">3</span>	人的疾病多半来自内部，食疗是最好的养生办法，尽量不要依赖药物。</p>
+			<div class="clear"></div>
+			</div>
+			
+			<div class="index-row">
+			<p><span class="label">4</span>	坚持以步代车，适量出汗的运动加上细心的食疗一定可以让你重新拥有健康的身体！</p>
+			<div class="clear"></div>
+			</div>	
+
+			</div>
+        </article>
+		
+		<article id="a-category" data-scroll="true">
+            <div class="scrollWrapper">
+				<ul class="list inset">
+					<li data-icon="next" data-selected="selected">
+					<a href="#food_list_section" data-target="section">
+					<strong>性寒食物</strong> 
+					</a>
+					</li>
+					
+					<li data-icon="next" data-selected="selected">
+					<strong>性凉食物</strong> 
+					</li>
+					
+					<li data-icon="next" data-selected="selected">
+					<strong>性平食物</strong> 
+					</li>
+					
+					<li data-icon="next" data-selected="selected">
+					<strong>性温食物</strong> 
+					</li>
+					
+					<li data-icon="next" data-selected="selected">
+					<strong>性热食物</strong> 
+					</li>
+				</ul>
+            </div>
+        </article>
+		
+		<article id="a-yangsheng" data-scroll="true" style="padding: 10px 0;">
+            <div class="scrollWrapper">
+			<ul class="list inset">
+				<li data-icon="next" data-selected="selected">
+					<a href="#detail_section" data-target="section">维生素的作用</a>
+				</li>
+			</ul>
+            </div>
+        </article>
+		
+		<article id="a-about" data-scroll="true" style="padding: 10px 0;">
+			<div class="scrollWrapper padding10">
+			<p class="center">开发者：暗夜里的精灵</p>
+			<p class="center">2014年4月</p>
+			
+			<p class="center margin-top10">如果你觉得这个应用好，欢迎推荐给你的家人！</p>
+			<p class="center margin-top10">任何意见或建议请发邮件到</p>
+			<p class="center">crazymus@foxmail.com</p>
+			</div>
+        </article>
+    </section>
+</div>
+<script type="text/javascript" src="phonegap.js"></script>
+<!-- lib -->
+<script type="text/javascript" src="js/lib/zepto.js"></script>
+<script type="text/javascript" src="js/lib/iscroll.js"></script>
+<script type="text/javascript" src="js/lib/template.min.js"></script>
+<script type="text/javascript" src="js/lib/Jingle.debug.js"></script>
+<script type="text/javascript" src="js/lib/zepto.touch2mouse.js"></script>
+<!--- app --->
+<script type="text/javascript" src="js/app/app_.js"></script>
+<script>
+$(function(){
+	
+	//显示提示信息
+	$("#showToast").tap(function(){
+		navigator.weixin.showToast('我会写phonegap插件了!');
+	});
+	
+	
+	
+	
+	//分享到微信好友
+	$('#weixin').tap(function(){
+
+		navigator.weixin.send({
+			 type: 'webpage',
+		    url: 'http://www.baidu.com',
+		    title: 'title',
+		    desc: 'desc',
+		    imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/webpage.png'
+		    isSendToTimeline: false 
+		}, null, null);
+		
+	});
+	
+	
+	//分享到朋友圈
+	$('#timeline').tap(function(){
+
+		navigator.weixin.send({
+			 type: 'webpage',
+		    url: 'http://www.baidu.com',
+		    title: 'title',
+		    desc: 'desc',
+		    imgUrl: 'http://www.baidu.com/img/bdlogo.gif',//if not defined, use 'res/drawable/webpage.png'
+		    isSendToTimeline: true 
+		}, null, null);
+		
+	});
+});
+
+
+
+document.addEventListener('deviceready', function(){
+	
+	//注册微信
+	navigator.weixin.register('wxd97ca7d7a2fae4dd',function(){
+		navigator.weixin.showToast('微信注册成功!');
+	}, function(){
+		navigator.weixin.showToast('微信注册失败!');
+	});
+	
+	//定义分享回调函数
+	navigator.weixin.sendCallBack = function(result){
+		var txt;
+		switch(result){
+		
+			case 1:
+				txt= '分享成功';
+			break;
+			
+			case 2:
+				txt='取消分享';
+			break;
+			
+			case 3:
+				txt='验证失败';
+			break;
+			
+			case 4:
+				txt = '未知错误';
+			break;
+		}
+		
+		navigator.weixin.showToast(txt);
+	}
+	
+	
+}, false);
+
+
+</script>
+<!--<script src="http://192.168.2.141:8080/target/target-script-min.js#anonymous"></script>-->
+</body>
+</html>

@@ -58,53 +58,60 @@ import android.widget.LinearLayout;
 public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 	
 	private static final String SDCARD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
+  
+  private static WeiXin instance;
+	
+	public WeiXin() {
+		instance = this;
+	}
 	
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 		boolean result = false;
-        try {
-            if (action.equals("register")) {
-            	String appId = args.getString(0); 
-				this.register(appId);
-				callbackContext.success();
-                result = true;
-            } else if (action.equals("unregister")) { 
-				this.unregister();
-				callbackContext.success();
-                result = true;
-            }
-            else if (action.equals("openWeixin")) {
-				this.open();
-				callbackContext.success();
-				result = true;
-            }
-			else if (action.equals("send")) {
-				JSONObject cfg = args.getJSONObject(0);
-				if (cfg.getString("type").equals("text")) {
-					this.sendText(cfg.getString("text"), cfg.getBoolean("isSendToTimeline"));
-				} else if (cfg.getString("type").equals("image")) {
-					this.sendImage(cfg.getString("data"), cfg.getString("imageType"), cfg.getBoolean("isSendToTimeline"));
-				} else if (cfg.getString("type").equals("music")) {
-					this.sendMusic(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
-				} else if (cfg.getString("type").equals("video")) {
-					this.sendVideo(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
-				} else if (cfg.getString("type").equals("webpage")) {
-					this.sendWebPage(cfg.getString("url"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
-				} else if (cfg.getString("type").equals("file")) {
-					this.sendFile(cfg.getString("path"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
-				}
-				
-				callbackContext.success();
-				result = true;
-            }
-            else {
-                result = false;
-            }
-        } catch (JSONException e) {
-            callbackContext.error("JSON Exception");
-			result = false;
+      try {
+        if (action.equals("register")) {
+          String appId = args.getString(0); 
+          this.register(appId);
+          callbackContext.success();
+          result = true;
+        } else if (action.equals("unregister")) { 
+          this.unregister();
+          callbackContext.success();
+          result = true;
+        } else if (action.equals("openWeixin")) {
+          this.open();
+          callbackContext.success();
+          result = true;
+        } else if(action.equals("showToast")){
+          String txt = args.getString(0);
+          this.showToast(txt);
+          result = true;
+        } else if (action.equals("send")) {
+          JSONObject cfg = args.getJSONObject(0);
+          if (cfg.getString("type").equals("text")) {
+            this.sendText(cfg.getString("text"), cfg.getBoolean("isSendToTimeline"));
+          } else if (cfg.getString("type").equals("image")) {
+            this.sendImage(cfg.getString("data"), cfg.getString("imageType"), cfg.getBoolean("isSendToTimeline"));
+          } else if (cfg.getString("type").equals("music")) {
+            this.sendMusic(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
+          } else if (cfg.getString("type").equals("video")) {
+            this.sendVideo(cfg.getString("url"), cfg.getBoolean("isLowBand"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
+          } else if (cfg.getString("type").equals("webpage")) {
+            this.sendWebPage(cfg.getString("url"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
+          } else if (cfg.getString("type").equals("file")) {
+            this.sendFile(cfg.getString("path"), cfg.getString("title"), cfg.getString("desc"), cfg.getString("imgUrl"), cfg.getBoolean("isSendToTimeline"));
+          }
+      
+          callbackContext.success();
+          result = true;
+        } else {
+            result = false;
         }
-		return result;
+      } catch (JSONException e) {
+        callbackContext.error("JSON Exception");
+        result = false;
+      }
+      return result;
     }
 	
 	private IWXAPI api;
@@ -119,7 +126,40 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 		api.openWXApp();
 	}
 
-	
+	//show toast
+  public void showToast(String txt) {
+		Context Activity = this.cordova.getActivity().getApplicationContext();
+		Toast.makeText(Activity, txt, Toast.LENGTH_LONG).show();
+	}
+  
+  //show callback message
+	public static void showCallback(int result) {
+		if (instance == null) {
+			return;
+		}
+		
+    //instance.webView.sendJavascript("navigator.weixin.showCallback(" + String.valueOf(result) + ")");
+    
+    switch (result) {
+      case 1:
+        txt= '分享成功';
+        break;
+      
+      case 2:
+        txt='取消分享';
+        break;
+      
+      case 3:
+        txt='验证失败';
+        break;
+      
+      case 4:
+        txt = '未知错误';
+        break;
+    }
+    this.showToast(txt);
+	}
+  
 	//send text
 	public void sendText(String text, boolean isSendToTimeline) {
 		
@@ -411,6 +451,9 @@ public class WeiXin extends CordovaPlugin implements IWXAPIEventHandler {
 				result = 4;
 				break;
 			}
+      
+      this.showCallback(result);
+      
 			LOG.d("onResp", "result");
 			System.out.println(result);
 		}
