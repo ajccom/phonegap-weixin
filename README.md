@@ -76,7 +76,7 @@ you can send text, image, music, video, webpage with this api.
 
 ```
 	{type: 'image',
-	imageType: 'path',//you can also use 'url' to send image.
+	imageType: 'path',//you can also use 'url' to send image(http url or Base64 data-url).
 	data: '/test.png',//SD card path or Url
 	isSendToTimeline: true}
 ```
